@@ -72,9 +72,6 @@ modded class ZombieBase
 
 	void SetupZombieDoors()
 	{
-		if (!m_ZenDoorPlugin)
-			m_ZenDoorPlugin = ZenZombieDoorsPlugin.Cast(GetPlugin(ZenZombieDoorsPlugin));
-
 		m_ZenDoorsCheckTimer = 0;
 		m_ZenDoorHittingPaused = false;
 
@@ -92,6 +89,21 @@ modded class ZombieBase
 		}
 	}
 
+	ZenZombieDoorsPlugin GetZenDoorsPlugin()
+	{
+		if (!m_ZenDoorPlugin)
+		{
+			m_ZenDoorPlugin = ZenZombieDoorsPlugin.Cast(GetPlugin(ZenZombieDoorsPlugin));
+		}
+
+		if (!m_ZenDoorPlugin)
+		{
+			Error("BAD ERROR: Couldn't retrieve ZenZombieDoorsPlugin!");
+		}
+
+		return m_ZenDoorPlugin;
+	}
+
 	void CheckBuildingDoors()
 	{
 		if (m_ZenDoorHittingPaused)
@@ -100,7 +112,9 @@ modded class ZombieBase
 		vector myPos = GetPosition();
 		float rangeSq = ZENMOD_BUILDING_SEARCH_RADIUS * ZENMOD_BUILDING_SEARCH_RADIUS;
 
-		foreach (ZenBuildingData b : m_ZenDoorPlugin.GetAllBuildings())
+		
+
+		foreach (ZenBuildingData b : GetZenDoorsPlugin().GetAllBuildings())
 		{
 			if (!b.m_Building)
 			{
@@ -175,7 +189,7 @@ modded class ZombieBase
 		m_ActualAttackType = GetDayZInfectedType().ChooseAttack(DayZInfectedAttackGroupType.FIGHT, 1, 0);
 		StartCommand_Attack(NULL, attackType, 1);
 
-		int hitCount = m_ZenDoorPlugin.GetDoorHitCount(bData.m_Building, bestDoorWorldPos);
+		int hitCount = GetZenDoorsPlugin().GetDoorHitCount(bData.m_Building, bestDoorWorldPos);
 		bool openedDoor = false;
 
 		if (m_ZenZombieData)
@@ -223,12 +237,12 @@ modded class ZombieBase
 			bData.m_Building.UnlockDoor(doorIdx);
 
 		bData.m_Building.OpenDoor(doorIdx);
-		m_ZenDoorPlugin.ResetDoorHitCount(bData, doorLocalPos);
+		GetZenDoorsPlugin().ResetDoorHitCount(bData, doorLocalPos);
 	}
 
 	void ResetDoorHitCounter(notnull ZenBuildingData bData, vector doorLocalPos)
 	{
-		m_ZenDoorPlugin.ResetDoorHitCount(bData, doorLocalPos);
+		GetZenDoorsPlugin().ResetDoorHitCount(bData, doorLocalPos);
 	}
 
 	void SpawnZombieDoorSoundFX(vector doorWorldPos)

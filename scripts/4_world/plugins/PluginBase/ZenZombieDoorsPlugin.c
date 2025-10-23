@@ -6,7 +6,7 @@ class ZenZombieDoorsPlugin extends PluginBase
 	{
 		Print("[ZenZombieDoorsPlugin] :: OnInit");
 		m_CachedBuildingsInWorld = new array<ref ZenBuildingData>();
-		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(DumpHouseStats, 60000, false);
+		//GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(DumpHouseStats, 60000, false);
 	}
 
 	override void OnDestroy()

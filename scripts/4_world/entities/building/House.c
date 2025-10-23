@@ -1,5 +1,8 @@
 modded class House
 {
+#ifdef SERVER
+	//SERVER-SIDE ONLY CODE: 
+	
 	override void DeferredInit()
 	{
 		super.DeferredInit();
@@ -119,4 +122,5 @@ modded class House
 
 		return false;
 	}
+#endif
 }

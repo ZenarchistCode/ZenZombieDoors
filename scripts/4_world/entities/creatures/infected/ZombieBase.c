@@ -1,12 +1,6 @@
 modded class ZombieBase
 {
-	static const float ZENMOD_BUILDING_SEARCH_RADIUS = 6.0;
-
-	protected static ref ZenZombieDoorsPlugin m_ZenDoorPlugin;
-	protected ref NoiseParams m_ZenDoorNoiseParams;
-	protected ref ZenZombieData m_ZenZombieData;
-	protected float m_ZenDoorsCheckTimer;
-	protected bool m_ZenDoorHittingPaused;
+	//! CLIENT & SERVER CODE:
 	protected bool m_PlayZenZombieDoorHitSound;
 
 	override void Init()
@@ -34,6 +28,17 @@ modded class ZombieBase
 		pos[2] = pos[2] + Math.RandomFloatInclusive(-0.1, 0.1);
 		SEffectManager.PlaySound("Zombie_Hit_Door_SoundSet", pos);
 	}
+
+#ifdef SERVER
+	//! SERVER-SIDE ONLY CODE:
+
+	static const float ZENMOD_BUILDING_SEARCH_RADIUS = 6.0;
+
+	protected static ref ZenZombieDoorsPlugin m_ZenDoorPlugin;
+	protected ref NoiseParams m_ZenDoorNoiseParams;
+	protected ref ZenZombieData m_ZenZombieData;
+	protected float m_ZenDoorsCheckTimer;
+	protected bool m_ZenDoorHittingPaused;
 
 	override void EOnInit(IEntity other, int extra)
 	{
@@ -111,8 +116,6 @@ modded class ZombieBase
 
 		vector myPos = GetPosition();
 		float rangeSq = ZENMOD_BUILDING_SEARCH_RADIUS * ZENMOD_BUILDING_SEARCH_RADIUS;
-
-		
 
 		foreach (ZenBuildingData b : GetZenDoorsPlugin().GetAllBuildings())
 		{
@@ -302,4 +305,5 @@ modded class ZombieBase
 			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).Remove(ReactivateDoorHitting);
 		}
 	}
+#endif
 }

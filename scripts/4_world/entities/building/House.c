@@ -7,6 +7,9 @@ modded class House
 	{
 		super.DeferredInit();
 
+		if (GetType().Contains("Wreck") || GetType().Contains("wreck"))
+			return;
+
 		Zen_PrepareDoors();
 	}
 
